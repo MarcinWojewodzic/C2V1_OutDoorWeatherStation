@@ -60,8 +60,8 @@ all: main-build
 main-build: C2V1_OutDoorWeatherStation.elf secondary-outputs
 
 # Tool invocations
-C2V1_OutDoorWeatherStation.elf C2V1_OutDoorWeatherStation.map: $(OBJS) $(USER_OBJS) D:\projekty_stm32_discavery\C2V1_OutDoorWeatherStation\STM32G051K8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "C2V1_OutDoorWeatherStation.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"D:\projekty_stm32_discavery\C2V1_OutDoorWeatherStation\STM32G051K8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="C2V1_OutDoorWeatherStation.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C2V1_OutDoorWeatherStation.elf C2V1_OutDoorWeatherStation.map: $(OBJS) $(USER_OBJS) C:\Users\M\Desktop\C2V1-OutDoorWatherStation\Firmware\C2V1_OutDoorWeatherStation\STM32G051K8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "C2V1_OutDoorWeatherStation.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\M\Desktop\C2V1-OutDoorWatherStation\Firmware\C2V1_OutDoorWeatherStation\STM32G051K8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="C2V1_OutDoorWeatherStation.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
