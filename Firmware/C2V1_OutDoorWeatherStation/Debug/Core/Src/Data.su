@@ -1,0 +1,2 @@
+../Core/Src/Data.c:13:13:DATA_GetSmPtr	8	static
+../Core/Src/Data.c:17:13:DATA_GetBsPtr	8	static

@@ -1,0 +1,5 @@
+../Core/Src/SM.c:21:6:SM_Handle	16	static
+../Core/Src/SM.c:33:13:SM_ChangeState	16	static
+../Core/Src/SM.c:44:13:SM_InitializeFunction	16	static
+../Core/Src/SM.c:49:13:SM_RunningFunction	8	static
+../Core/Src/SM.c:54:13:SM_SleepFunction	8	static
