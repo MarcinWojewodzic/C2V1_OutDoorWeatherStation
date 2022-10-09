@@ -7,9 +7,11 @@
 
 #ifndef INC_DATA_H_
 #define INC_DATA_H_
-#include "main.h"
-#include "SM.h"
 #include "BSensor.h"
-SM_TypeDef *DATA_GetSmPtr();
-BS_TypeDef *DATA_GetBsPtr();
+#include "SM.h"
+#include "Switch.h"
+#include "main.h"
+SM_TypeDef *DATA_GetSmPtr(void);
+BS_TypeDef *DATA_GetBsPtr(void);
+SW_TypeDef *DATA_GetSwPtr(void);
 #endif /* INC_DATA_H_ */

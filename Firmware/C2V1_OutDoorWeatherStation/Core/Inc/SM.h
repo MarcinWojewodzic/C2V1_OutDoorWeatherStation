@@ -8,8 +8,9 @@
 #ifndef INC_SM_H_
 #define INC_SM_H_
 #include "BSensor.h"
+#include "Switch.h"
 #include "main.h"
-#define TRANSITION_TABLE_SIZE sizeof(TransitionTable) / sizeof(SMTransitionTable_TypeDef)
+#define SM_TRANSITION_TABLE_SIZE sizeof(SmTransitionTable) / sizeof(SMTransitionTable_TypeDef)
 typedef enum
 {
    SM_STATE_INITIALIZE,
@@ -38,6 +39,7 @@ typedef struct
    SMState_TypeDef State;
    SMEvent_TypeDef NewEvent;
    BS_TypeDef *Bs;
+   SW_TypeDef *Sw;
    uint32_t LastTick;
 } SM_TypeDef;
 void SM_Handle(void);
