@@ -51,4 +51,6 @@ typedef struct
 {
    void (*SwFunction)(void);
 } SWFunctions_TypeDef;
+void Switch_Handle(void);
+void SW_Init(SW_TypeDef *Switch);
 #endif /* INC_SWITCH_H_ */

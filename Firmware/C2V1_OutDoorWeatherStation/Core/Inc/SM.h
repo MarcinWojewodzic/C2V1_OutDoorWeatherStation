@@ -10,6 +10,7 @@
 #include "BSensor.h"
 #include "Switch.h"
 #include "main.h"
+#include "rfp.h"
 #define SM_TRANSITION_TABLE_SIZE sizeof(SmTransitionTable) / sizeof(SMTransitionTable_TypeDef)
 typedef enum
 {
@@ -40,6 +41,7 @@ typedef struct
    SMEvent_TypeDef NewEvent;
    BS_TypeDef *Bs;
    SW_TypeDef *Sw;
+   RFP_TypeDef *Rfp;
    uint32_t LastTick;
 } SM_TypeDef;
 void SM_Handle(void);

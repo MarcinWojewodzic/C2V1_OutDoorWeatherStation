@@ -6,27 +6,34 @@
  */
 #include "SM.h"
 #include "BSensor.h"
-#include "Data.h"
 #include "main.h"
+#include "rfp.h"
 #include "stdio.h"
+void SM_CommadTestFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart);
 static void SM_InitializeFunction(void);
 static void SM_RunningFunction(void);
 static void SM_SleepFunction(void);
 static void SM_ChangeState(void);
-// SM_TypeDef Sm                               = { 0 };
+SM_TypeDef Sm                                 = { 0 };
+SW_TypeDef Sw                                 = { 0 };
+RFP_TypeDef Rfp                               = { 0 };
 SMTransitionTable_TypeDef SmTransitionTable[] = { { SM_STATE_INITIALIZE, SM_STATE_RUNNING, SM_EVENT_END_INITIALIZE },
-                                                { SM_STATE_RUNNING, SM_STATE_SLEEP, SM_EVENT_END_RUNNING },
-                                                { SM_STATE_SLEEP, SM_STATE_RUNNING, SM_EVENT_END_SLEEP } };
-SMFunctions_TypeDef SmFunctions[]           = { { SM_InitializeFunction }, { SM_RunningFunction }, { SM_SleepFunction } };
+                                                  { SM_STATE_RUNNING, SM_STATE_SLEEP, SM_EVENT_END_RUNNING },
+                                                  { SM_STATE_SLEEP, SM_STATE_RUNNING, SM_EVENT_END_SLEEP } };
+SMFunctions_TypeDef SmFunctions[]             = { { SM_InitializeFunction }, { SM_RunningFunction }, { SM_SleepFunction } };
 void SM_Handle(void)
 {
-   if(HAL_GetTick() - DATA_GetSmPtr()->LastTick > 1000)
+   if(Rfp.Initialize == RFP_INITIALIZE)
    {
-      DATA_GetSmPtr()->LastTick = HAL_GetTick();
+      RFP_Handle();
+   }
+   if(HAL_GetTick() - Sm.LastTick > 1000)
+   {
+      Sm.LastTick = HAL_GetTick();
       SM_ChangeState();
-      if(SmFunctions[DATA_GetSmPtr()->State].SmFunction != NULL)
+      if(SmFunctions[Sm.State].SmFunction != NULL)
       {
-         SmFunctions[DATA_GetSmPtr()->State].SmFunction();
+         SmFunctions[Sm.State].SmFunction();
       }
    }
 }
@@ -34,26 +41,41 @@ static void SM_ChangeState(void)
 {
    for(int i = 0; i < SM_TRANSITION_TABLE_SIZE; i++)
    {
-      if(DATA_GetSmPtr()->State == SmTransitionTable[i].Source && DATA_GetSmPtr()->NewEvent == SmTransitionTable[i].Event)
+      if(Sm.State == SmTransitionTable[i].Source && Sm.NewEvent == SmTransitionTable[i].Event)
       {
-         DATA_GetSmPtr()->State = SmTransitionTable[i].Destination;
+         Sm.State = SmTransitionTable[i].Destination;
       }
    }
-   DATA_GetSmPtr()->NewEvent = SM_EVENT_NOTHING;
+   Sm.NewEvent = SM_EVENT_NOTHING;
 }
 static void SM_InitializeFunction(void)
 {
-   DATA_GetSmPtr()->Bs       = DATA_GetBsPtr();
-   DATA_GetSmPtr()->Sw       = DATA_GetSwPtr();
-   DATA_GetSmPtr()->NewEvent = SM_EVENT_END_INITIALIZE;
+   // Sm.Bs       = DATA_GetBsPtr();
+   Sm.Sw  = &Sw;
+   Sm.Rfp = &Rfp;
+   SW_Init(&Sw);
+   RFP_Init(&Rfp, RFP_ODWS);
+   RFP_RegisterCommandFunction(RFP_TEST, SM_CommadTestFunction);
+   Sw.NewEvent = SW_EVENT_NOTHING;
+   Sw.State    = SW_STATE_INITIALIZE;
+   Sm.NewEvent = SM_EVENT_END_INITIALIZE;
 }
 static void SM_RunningFunction(void)
 {
-   HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 1);
-   DATA_GetSmPtr()->NewEvent = SM_EVENT_END_RUNNING;
+   Switch_Handle();
+   Sm.NewEvent = SM_EVENT_END_RUNNING;
 }
 static void SM_SleepFunction(void)
 {
-   HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 0);
-   DATA_GetSmPtr()->NewEvent = SM_EVENT_END_SLEEP;
+   Sm.NewEvent = SM_EVENT_END_SLEEP;
+}
+void SM_CommadTestFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart)
+{
+   HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, 1);
+}
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+   HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 1);
+   Rfp.DataSize = Size;
+   RFP_InterruptTask();
 }

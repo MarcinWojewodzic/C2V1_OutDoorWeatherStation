@@ -1,9 +1,10 @@
 ../Core/Src/Switch.c:29:6:Switch_Handle	8	static
 ../Core/Src/Switch.c:37:13:SW_ChangeState	16	static
-../Core/Src/Switch.c:48:13:SW_InitializeFunction	8	static
-../Core/Src/Switch.c:51:13:SW_IdleFunction	8	static
-../Core/Src/Switch.c:54:13:SW_DebounceFunction	8	static
-../Core/Src/Switch.c:57:13:SW_TickFunction	8	static
-../Core/Src/Switch.c:60:13:SW_PressFunction	8	static
-../Core/Src/Switch.c:63:13:SW_ConfirmFunction	8	static
-../Core/Src/Switch.c:66:13:SW_ReleaseFunction	8	static
+../Core/Src/Switch.c:50:13:SW_InitializeFunction	8	static
+../Core/Src/Switch.c:55:13:SW_IdleFunction	8	static
+../Core/Src/Switch.c:60:13:SW_DebounceFunction	8	static
+../Core/Src/Switch.c:65:13:SW_TickFunction	8	static
+../Core/Src/Switch.c:70:13:SW_PressFunction	8	static
+../Core/Src/Switch.c:75:13:SW_ConfirmFunction	8	static
+../Core/Src/Switch.c:80:13:SW_ReleaseFunction	8	static
+../Core/Src/Switch.c:86:6:SW_Init	16	static

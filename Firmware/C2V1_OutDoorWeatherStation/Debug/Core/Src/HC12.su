@@ -1,0 +1,4 @@
+../Core/Src/HC12.c:10:6:HC12_EnterCommandMode	8	static
+../Core/Src/HC12.c:14:6:HC12_ExitCommandMode	8	static
+../Core/Src/HC12.c:18:6:HC12_TransmitData	16	static
+../Core/Src/HC12.c:22:6:HC12_ReciveToIdleDMA	16	static

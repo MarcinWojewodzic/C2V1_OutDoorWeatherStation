@@ -1,0 +1,2 @@
+../Core/Src/crc.c:9:10:Crc	32	static
+../Core/Src/crc.c:24:19:RepareMessage	40	static

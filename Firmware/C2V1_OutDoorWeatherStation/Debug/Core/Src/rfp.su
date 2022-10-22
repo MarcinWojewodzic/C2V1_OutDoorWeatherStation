@@ -1,0 +1,13 @@
+../Core/Src/rfp.c:31:6:RFP_Handle	8	static
+../Core/Src/rfp.c:39:6:RFP_Init	24	static
+../Core/Src/rfp.c:54:13:RFP_ChangeState	16	static
+../Core/Src/rfp.c:67:6:RFP_RegisterCommandFunction	16	static
+../Core/Src/rfp.c:71:6:RFP_RegisterDataFunction	16	static
+../Core/Src/rfp.c:75:6:RFP_RegisterMessageFunction	16	static
+../Core/Src/rfp.c:79:6:RFP_InterruptTask	8	static
+../Core/Src/rfp.c:83:6:RFP_SendData	40	static
+../Core/Src/rfp.c:94:13:RFP_SendResponseFunction	24	static
+../Core/Src/rfp.c:107:13:RFP_InitializeFunction	8	static
+../Core/Src/rfp.c:113:13:RFP_IdleFunction	8	static
+../Core/Src/rfp.c:125:13:RFP_ParseFunction	16	static
+../Core/Src/rfp.c:159:13:RFP_RunningFunction	16	static

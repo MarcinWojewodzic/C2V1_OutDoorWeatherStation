@@ -1,5 +1,7 @@
-../Core/Src/SM.c:21:6:SM_Handle	16	static
-../Core/Src/SM.c:33:13:SM_ChangeState	16	static
-../Core/Src/SM.c:44:13:SM_InitializeFunction	16	static
-../Core/Src/SM.c:50:13:SM_RunningFunction	8	static
-../Core/Src/SM.c:55:13:SM_SleepFunction	8	static
+../Core/Src/SM.c:24:6:SM_Handle	8	static
+../Core/Src/SM.c:40:13:SM_ChangeState	16	static
+../Core/Src/SM.c:51:13:SM_InitializeFunction	8	static
+../Core/Src/SM.c:63:13:SM_RunningFunction	8	static
+../Core/Src/SM.c:68:13:SM_SleepFunction	8	static
+../Core/Src/SM.c:72:6:SM_CommadTestFunction	24	static
+../Core/Src/SM.c:76:6:HAL_UARTEx_RxEventCallback	16	static

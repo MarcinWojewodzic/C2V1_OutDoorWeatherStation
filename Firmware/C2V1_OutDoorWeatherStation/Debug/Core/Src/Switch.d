@@ -34,8 +34,7 @@ Core/Src/Switch.o: ../Core/Src/Switch.c ../Core/Inc/Switch.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h \
- ../Core/Inc/Data.h ../Core/Inc/BSensor.h ../Core/Inc/SM.h \
- ../Core/Inc/Switch.h ../Core/Inc/main.h
+ ../Core/Inc/main.h
 ../Core/Inc/Switch.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h:
@@ -73,8 +72,4 @@ Core/Src/Switch.o: ../Core/Src/Switch.c ../Core/Inc/Switch.h \
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h:
-../Core/Inc/Data.h:
-../Core/Inc/BSensor.h:
-../Core/Inc/SM.h:
-../Core/Inc/Switch.h:
 ../Core/Inc/main.h:
