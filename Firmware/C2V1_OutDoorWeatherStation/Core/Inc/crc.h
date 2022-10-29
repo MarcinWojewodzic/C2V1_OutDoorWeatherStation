@@ -8,6 +8,7 @@
 #ifndef INC_CRC_H_
 #define INC_CRC_H_
 #define CRC_INITIAL_VALUE 0xffffffff
+#include "main.h"
 typedef enum
 {
 	CRC_ERROR,

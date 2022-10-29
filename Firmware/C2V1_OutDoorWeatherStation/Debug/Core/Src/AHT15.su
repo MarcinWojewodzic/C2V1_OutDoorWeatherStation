@@ -1,0 +1,5 @@
+../Core/Src/AHT15.c:10:13:AHT15_Transmit	24	static
+../Core/Src/AHT15.c:14:13:AHT15_Read	24	static
+../Core/Src/AHT15.c:18:6:AHT15_TriggerMeasurment	16	static
+../Core/Src/AHT15.c:23:6:AHT15_ReadMesurmentFloat	40	static
+../Core/Src/AHT15.c:33:6:AHT15_InitFunction	16	static

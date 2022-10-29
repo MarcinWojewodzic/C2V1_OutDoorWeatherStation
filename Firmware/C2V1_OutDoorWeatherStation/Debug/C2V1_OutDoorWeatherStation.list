@@ -35,13 +35,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_ranges 00000e78  00000000  00000000  00038820  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_line   0000ebde  00000000  00000000  00039698  2**0
+ 16 .debug_line   0000ebdc  00000000  00000000  00039698  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_str    00004e3a  00000000  00000000  00048276  2**0
+ 17 .debug_str    00004e25  00000000  00000000  00048274  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .comment      00000050  00000000  00000000  0004d0b0  2**0
+ 18 .comment      00000050  00000000  00000000  0004d099  2**0
                   CONTENTS, READONLY
- 19 .debug_frame  00003864  00000000  00000000  0004d100  2**2
+ 19 .debug_frame  00003864  00000000  00000000  0004d0ec  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -511,11 +511,11 @@ Disassembly of section .text:
  8000446:	d02d      	beq.n	80004a4 <__udivmoddi4+0x78>
  8000448:	4649      	mov	r1, r9
  800044a:	4650      	mov	r0, sl
- 800044c:	f000 f8ba 	bl	80005c4 <__clzdi2>
+ 800044c:	f000 f8d8 	bl	8000600 <__clzdi2>
  8000450:	0029      	movs	r1, r5
  8000452:	0006      	movs	r6, r0
  8000454:	0020      	movs	r0, r4
- 8000456:	f000 f8b5 	bl	80005c4 <__clzdi2>
+ 8000456:	f000 f8d3 	bl	8000600 <__clzdi2>
  800045a:	1a33      	subs	r3, r6, r0
  800045c:	4698      	mov	r8, r3
  800045e:	3b20      	subs	r3, #32
@@ -698,44 +698,44 @@ Disassembly of section .text:
  80005c0:	e7cd      	b.n	800055e <__udivmoddi4+0x132>
  80005c2:	46c0      	nop			; (mov r8, r8)
 
-080005c4 <__clzdi2>:
- 80005c4:	b510      	push	{r4, lr}
- 80005c6:	2900      	cmp	r1, #0
- 80005c8:	d103      	bne.n	80005d2 <__clzdi2+0xe>
- 80005ca:	f000 f807 	bl	80005dc <__clzsi2>
- 80005ce:	3020      	adds	r0, #32
- 80005d0:	e002      	b.n	80005d8 <__clzdi2+0x14>
- 80005d2:	0008      	movs	r0, r1
- 80005d4:	f000 f802 	bl	80005dc <__clzsi2>
- 80005d8:	bd10      	pop	{r4, pc}
- 80005da:	46c0      	nop			; (mov r8, r8)
-
-080005dc <__clzsi2>:
- 80005dc:	211c      	movs	r1, #28
- 80005de:	2301      	movs	r3, #1
- 80005e0:	041b      	lsls	r3, r3, #16
- 80005e2:	4298      	cmp	r0, r3
- 80005e4:	d301      	bcc.n	80005ea <__clzsi2+0xe>
- 80005e6:	0c00      	lsrs	r0, r0, #16
- 80005e8:	3910      	subs	r1, #16
- 80005ea:	0a1b      	lsrs	r3, r3, #8
- 80005ec:	4298      	cmp	r0, r3
- 80005ee:	d301      	bcc.n	80005f4 <__clzsi2+0x18>
- 80005f0:	0a00      	lsrs	r0, r0, #8
- 80005f2:	3908      	subs	r1, #8
- 80005f4:	091b      	lsrs	r3, r3, #4
- 80005f6:	4298      	cmp	r0, r3
- 80005f8:	d301      	bcc.n	80005fe <__clzsi2+0x22>
- 80005fa:	0900      	lsrs	r0, r0, #4
- 80005fc:	3904      	subs	r1, #4
- 80005fe:	a202      	add	r2, pc, #8	; (adr r2, 8000608 <__clzsi2+0x2c>)
- 8000600:	5c10      	ldrb	r0, [r2, r0]
- 8000602:	1840      	adds	r0, r0, r1
- 8000604:	4770      	bx	lr
- 8000606:	46c0      	nop			; (mov r8, r8)
- 8000608:	02020304 	.word	0x02020304
- 800060c:	01010101 	.word	0x01010101
+080005c4 <__clzsi2>:
+ 80005c4:	211c      	movs	r1, #28
+ 80005c6:	2301      	movs	r3, #1
+ 80005c8:	041b      	lsls	r3, r3, #16
+ 80005ca:	4298      	cmp	r0, r3
+ 80005cc:	d301      	bcc.n	80005d2 <__clzsi2+0xe>
+ 80005ce:	0c00      	lsrs	r0, r0, #16
+ 80005d0:	3910      	subs	r1, #16
+ 80005d2:	0a1b      	lsrs	r3, r3, #8
+ 80005d4:	4298      	cmp	r0, r3
+ 80005d6:	d301      	bcc.n	80005dc <__clzsi2+0x18>
+ 80005d8:	0a00      	lsrs	r0, r0, #8
+ 80005da:	3908      	subs	r1, #8
+ 80005dc:	091b      	lsrs	r3, r3, #4
+ 80005de:	4298      	cmp	r0, r3
+ 80005e0:	d301      	bcc.n	80005e6 <__clzsi2+0x22>
+ 80005e2:	0900      	lsrs	r0, r0, #4
+ 80005e4:	3904      	subs	r1, #4
+ 80005e6:	a202      	add	r2, pc, #8	; (adr r2, 80005f0 <__clzsi2+0x2c>)
+ 80005e8:	5c10      	ldrb	r0, [r2, r0]
+ 80005ea:	1840      	adds	r0, r0, r1
+ 80005ec:	4770      	bx	lr
+ 80005ee:	46c0      	nop			; (mov r8, r8)
+ 80005f0:	02020304 	.word	0x02020304
+ 80005f4:	01010101 	.word	0x01010101
 	...
+
+08000600 <__clzdi2>:
+ 8000600:	b510      	push	{r4, lr}
+ 8000602:	2900      	cmp	r1, #0
+ 8000604:	d103      	bne.n	800060e <__clzdi2+0xe>
+ 8000606:	f7ff ffdd 	bl	80005c4 <__clzsi2>
+ 800060a:	3020      	adds	r0, #32
+ 800060c:	e002      	b.n	8000614 <__clzdi2+0x14>
+ 800060e:	0008      	movs	r0, r1
+ 8000610:	f7ff ffd8 	bl	80005c4 <__clzsi2>
+ 8000614:	bd10      	pop	{r4, pc}
+ 8000616:	46c0      	nop			; (mov r8, r8)
 
 08000618 <HC12_ExitCommandMode>:
 void HC12_EnterCommandMode(void)
@@ -1588,8 +1588,8 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
 08000b08 <Crc>:
  *      Author: M
  */
-#include "main.h"
 #include "crc.h"
+#include "main.h"
 uint32_t Crc(uint32_t PreviousCRC, uint32_t DataLength, uint8_t *data)
 {
  8000b08:	b580      	push	{r7, lr}
@@ -1598,25 +1598,25 @@ uint32_t Crc(uint32_t PreviousCRC, uint32_t DataLength, uint8_t *data)
  8000b0e:	60f8      	str	r0, [r7, #12]
  8000b10:	60b9      	str	r1, [r7, #8]
  8000b12:	607a      	str	r2, [r7, #4]
-	PreviousCRC ^= data[0];
+   PreviousCRC ^= data[0];
  8000b14:	687b      	ldr	r3, [r7, #4]
  8000b16:	781b      	ldrb	r3, [r3, #0]
  8000b18:	001a      	movs	r2, r3
  8000b1a:	68fb      	ldr	r3, [r7, #12]
  8000b1c:	4053      	eors	r3, r2
  8000b1e:	60fb      	str	r3, [r7, #12]
-    for (uint32_t i = 1; i < DataLength; i++)
+   for(uint32_t i = 1; i < DataLength; i++)
  8000b20:	2301      	movs	r3, #1
  8000b22:	617b      	str	r3, [r7, #20]
  8000b24:	e018      	b.n	8000b58 <Crc+0x50>
-    {
-        uint32_t temp = data[i];
+   {
+      uint32_t temp = data[i];
  8000b26:	687a      	ldr	r2, [r7, #4]
  8000b28:	697b      	ldr	r3, [r7, #20]
  8000b2a:	18d3      	adds	r3, r2, r3
  8000b2c:	781b      	ldrb	r3, [r3, #0]
  8000b2e:	613b      	str	r3, [r7, #16]
-        PreviousCRC ^= ((uint32_t)temp * (256 * i));
+      PreviousCRC ^= ((uint32_t)temp * (256 * i));
  8000b30:	697b      	ldr	r3, [r7, #20]
  8000b32:	693a      	ldr	r2, [r7, #16]
  8000b34:	4353      	muls	r3, r2
@@ -1624,22 +1624,22 @@ uint32_t Crc(uint32_t PreviousCRC, uint32_t DataLength, uint8_t *data)
  8000b38:	68fa      	ldr	r2, [r7, #12]
  8000b3a:	4053      	eors	r3, r2
  8000b3c:	60fb      	str	r3, [r7, #12]
-        if (PreviousCRC & 0x80000000)
+      if(PreviousCRC & 0x80000000)
  8000b3e:	68fb      	ldr	r3, [r7, #12]
  8000b40:	2b00      	cmp	r3, #0
  8000b42:	da03      	bge.n	8000b4c <Crc+0x44>
-        {
-        	PreviousCRC ^= 0xABC245C2;
+      {
+         PreviousCRC ^= 0xABC245C2;
  8000b44:	68fb      	ldr	r3, [r7, #12]
  8000b46:	4a09      	ldr	r2, [pc, #36]	; (8000b6c <Crc+0x64>)
  8000b48:	4053      	eors	r3, r2
  8000b4a:	60fb      	str	r3, [r7, #12]
-        }
-        PreviousCRC <<= 1;
+      }
+      PreviousCRC <<= 1;
  8000b4c:	68fb      	ldr	r3, [r7, #12]
  8000b4e:	005b      	lsls	r3, r3, #1
  8000b50:	60fb      	str	r3, [r7, #12]
-    for (uint32_t i = 1; i < DataLength; i++)
+   for(uint32_t i = 1; i < DataLength; i++)
  8000b52:	697b      	ldr	r3, [r7, #20]
  8000b54:	3301      	adds	r3, #1
  8000b56:	617b      	str	r3, [r7, #20]
@@ -1647,8 +1647,8 @@ uint32_t Crc(uint32_t PreviousCRC, uint32_t DataLength, uint8_t *data)
  8000b5a:	68bb      	ldr	r3, [r7, #8]
  8000b5c:	429a      	cmp	r2, r3
  8000b5e:	d3e2      	bcc.n	8000b26 <Crc+0x1e>
-    }
-    return PreviousCRC;
+   }
+   return PreviousCRC;
  8000b60:	68fb      	ldr	r3, [r7, #12]
 }
  8000b62:	0018      	movs	r0, r3
@@ -1667,22 +1667,22 @@ CRCStatus_TypeDef RepareMessage(uint32_t OryginalCRC, uint8_t *data, uint32_t Da
  8000b76:	60f8      	str	r0, [r7, #12]
  8000b78:	60b9      	str	r1, [r7, #8]
  8000b7a:	607a      	str	r2, [r7, #4]
-    uint8_t temp = 1;
+   uint8_t temp = 1;
  8000b7c:	2317      	movs	r3, #23
  8000b7e:	18fb      	adds	r3, r7, r3
  8000b80:	2201      	movs	r2, #1
  8000b82:	701a      	strb	r2, [r3, #0]
-    for (int i = 0; i < DataLength; i++)
+   for(int i = 0; i < DataLength; i++)
  8000b84:	2300      	movs	r3, #0
  8000b86:	61fb      	str	r3, [r7, #28]
  8000b88:	e03e      	b.n	8000c08 <RepareMessage+0x98>
-    {
-        for (int j = 0; j < 8; j++)
+   {
+      for(int j = 0; j < 8; j++)
  8000b8a:	2300      	movs	r3, #0
  8000b8c:	61bb      	str	r3, [r7, #24]
  8000b8e:	e035      	b.n	8000bfc <RepareMessage+0x8c>
-        {
-            data[i] ^= (temp << j);
+      {
+         data[i] ^= (temp << j);
  8000b90:	69fb      	ldr	r3, [r7, #28]
  8000b92:	68ba      	ldr	r2, [r7, #8]
  8000b94:	18d3      	adds	r3, r2, r3
@@ -1702,7 +1702,7 @@ CRCStatus_TypeDef RepareMessage(uint32_t OryginalCRC, uint8_t *data, uint32_t Da
  8000bb0:	18d3      	adds	r3, r2, r3
  8000bb2:	b2ca      	uxtb	r2, r1
  8000bb4:	701a      	strb	r2, [r3, #0]
-            if (OryginalCRC == Crc(CRC_INITIAL_VALUE, DataLength, data))
+         if(OryginalCRC == Crc(CRC_INITIAL_VALUE, DataLength, data))
  8000bb6:	68ba      	ldr	r2, [r7, #8]
  8000bb8:	6879      	ldr	r1, [r7, #4]
  8000bba:	2301      	movs	r3, #1
@@ -1713,14 +1713,14 @@ CRCStatus_TypeDef RepareMessage(uint32_t OryginalCRC, uint8_t *data, uint32_t Da
  8000bc6:	68fb      	ldr	r3, [r7, #12]
  8000bc8:	4293      	cmp	r3, r2
  8000bca:	d101      	bne.n	8000bd0 <RepareMessage+0x60>
-            {
-                return CRC_OK;
+         {
+            return CRC_OK;
  8000bcc:	2301      	movs	r3, #1
  8000bce:	e020      	b.n	8000c12 <RepareMessage+0xa2>
-            }
-            else
-            {
-                data[i] ^= (temp << j);
+         }
+         else
+         {
+            data[i] ^= (temp << j);
  8000bd0:	69fb      	ldr	r3, [r7, #28]
  8000bd2:	68ba      	ldr	r2, [r7, #8]
  8000bd4:	18d3      	adds	r3, r2, r3
@@ -1740,14 +1740,14 @@ CRCStatus_TypeDef RepareMessage(uint32_t OryginalCRC, uint8_t *data, uint32_t Da
  8000bf0:	18d3      	adds	r3, r2, r3
  8000bf2:	b2ca      	uxtb	r2, r1
  8000bf4:	701a      	strb	r2, [r3, #0]
-        for (int j = 0; j < 8; j++)
+      for(int j = 0; j < 8; j++)
  8000bf6:	69bb      	ldr	r3, [r7, #24]
  8000bf8:	3301      	adds	r3, #1
  8000bfa:	61bb      	str	r3, [r7, #24]
  8000bfc:	69bb      	ldr	r3, [r7, #24]
  8000bfe:	2b07      	cmp	r3, #7
  8000c00:	ddc6      	ble.n	8000b90 <RepareMessage+0x20>
-    for (int i = 0; i < DataLength; i++)
+   for(int i = 0; i < DataLength; i++)
  8000c02:	69fb      	ldr	r3, [r7, #28]
  8000c04:	3301      	adds	r3, #1
  8000c06:	61fb      	str	r3, [r7, #28]
@@ -1755,10 +1755,10 @@ CRCStatus_TypeDef RepareMessage(uint32_t OryginalCRC, uint8_t *data, uint32_t Da
  8000c0a:	687a      	ldr	r2, [r7, #4]
  8000c0c:	429a      	cmp	r2, r3
  8000c0e:	d8bc      	bhi.n	8000b8a <RepareMessage+0x1a>
-            }
-        }
-    }
-    return CRC_ERROR;
+         }
+      }
+   }
+   return CRC_ERROR;
  8000c10:	2300      	movs	r3, #0
 }
  8000c12:	0018      	movs	r0, r3

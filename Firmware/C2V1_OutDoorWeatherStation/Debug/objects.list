@@ -1,3 +1,4 @@
+"./Core/Src/AHT15.o"
 "./Core/Src/BSensor.o"
 "./Core/Src/HC12.o"
 "./Core/Src/SM.o"
