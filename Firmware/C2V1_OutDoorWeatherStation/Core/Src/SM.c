@@ -6,6 +6,7 @@
  */
 #include "SM.h"
 #include "BSensor.h"
+#include "MAXProtocol.h"
 #include "main.h"
 #include "rfp.h"
 #include "stdio.h"
@@ -17,6 +18,7 @@ static void SM_ChangeState(void);
 SM_TypeDef Sm                                 = { 0 };
 SW_TypeDef Sw                                 = { 0 };
 RFP_TypeDef Rfp                               = { 0 };
+MAX_TypeDef MAX                               = { 0 };
 SMTransitionTable_TypeDef SmTransitionTable[] = { { SM_STATE_INITIALIZE, SM_STATE_RUNNING, SM_EVENT_END_INITIALIZE },
                                                   { SM_STATE_RUNNING, SM_STATE_SLEEP, SM_EVENT_END_RUNNING },
                                                   { SM_STATE_SLEEP, SM_STATE_RUNNING, SM_EVENT_END_SLEEP } };
@@ -55,6 +57,7 @@ static void SM_InitializeFunction(void)
    Sm.Rfp = &Rfp;
    SW_Init(&Sw);
    RFP_Init(&Rfp, RFP_ODWS);
+   MAX_Init(&MAX, MAX_ODWS);
    RFP_RegisterCommandFunction(RFP_TEST, SM_CommadTestFunction);
    Sw.NewEvent = SW_EVENT_NOTHING;
    Sw.State    = SW_STATE_INITIALIZE;

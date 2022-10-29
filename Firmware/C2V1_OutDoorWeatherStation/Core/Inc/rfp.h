@@ -83,7 +83,9 @@ typedef enum
    RFP_STATE_IDLE,
    RFP_STATE_PARSE,
    RFP_STATE_RUNNING,
-   RFP_STATE_WAIT_FOR_RESPONSE
+   RFP_STATE_SEND,
+   RFP_STATE_WAIT_FOR_RESPONSE,
+   RFP_STATE_PARSE_RESPONSE
 } RFPState_TypeDef;
 typedef enum
 {
@@ -92,7 +94,8 @@ typedef enum
    RFP_EVENT_END_INITIALIZE,
    RFP_EVENT_ERROR,
    RFP_EVENT_DATA_OK,
-   RFP_EVENT_WAIT_FOR_RESPONSE
+   RFP_EVENT_WAIT_FOR_RESPONSE,
+   RFP_EVENT_SEND
 } RFPEvent_TypeDef;
 typedef enum
 {
@@ -106,9 +109,9 @@ typedef enum
 } RFPNewDataFlag_TypeDef;
 typedef enum
 {
-	RFP_SEND_FLAG_RESET,
-	RFP_SEND_FLAG_SET
-}RFPSendFlag_TypeDef;
+   RFP_SEND_FLAG_RESET,
+   RFP_SEND_FLAG_SET
+} RFPSendFlag_TypeDef;
 typedef struct
 {
    RFPState_TypeDef Source;
@@ -126,6 +129,8 @@ typedef struct
    uint32_t DataSize;
    RFPDeviceID_TypeDef SourceMessage;
    RFPSendFlag_TypeDef SendFlag;
+   uint32_t Cnt;
+   uint32_t LastTick;
 } RFP_TypeDef;
 typedef struct
 {
