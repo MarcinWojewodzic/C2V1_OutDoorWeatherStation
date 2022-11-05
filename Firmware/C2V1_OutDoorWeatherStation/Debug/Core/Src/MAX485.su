@@ -1,0 +1,4 @@
+../Core/Src/MAX485.c:11:13:MAX485_ListeningMode	8	static
+../Core/Src/MAX485.c:15:13:MAX485_TransmitMode	8	static
+../Core/Src/MAX485.c:19:6:MAX485_ReciveToIdleDMA	16	static
+../Core/Src/MAX485.c:24:6:MAX485_TransmitData	24	static,ignoring_inline_asm

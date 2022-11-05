@@ -127,6 +127,7 @@ typedef struct
    volatile RFPNewDataFlag_TypeDef NewDataFlag;
    RFPDeviceID_TypeDef DeviceType;
    uint32_t DataSize;
+   uint32_t DataSizeTransmit;
    RFPDeviceID_TypeDef SourceMessage;
    RFPSendFlag_TypeDef SendFlag;
    uint32_t Cnt;

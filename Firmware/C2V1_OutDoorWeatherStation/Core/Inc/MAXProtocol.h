@@ -131,6 +131,7 @@ typedef struct
    MAXSendFlag_TypeDef SendFlag;
    uint32_t Cnt;
    uint32_t LastTick;
+   uint32_t DatTransmitSize;
 } MAX_TypeDef;
 typedef struct
 {
@@ -155,6 +156,6 @@ void MAX_RegisterDataFunction(void (*Callback)(uint8_t *, uint32_t, uint32_t));
 void MAX_RegisterMessageFunction(MAXMessage_TypeDef Message, void (*Callback)(uint8_t *, uint32_t, uint32_t));
 void MAX_InterruptTask(void);
 void MAX_SendData(MAXDeviceID_TypeDef Destination, MAXMessageType_TypeDef Type, uint8_t *Data, uint32_t Length);
-
+void MAX_InterruptErrorTask(void);
 
 #endif /* INC_MAX_H_ */

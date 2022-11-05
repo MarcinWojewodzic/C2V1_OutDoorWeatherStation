@@ -100,7 +100,7 @@ int main(void)
   /* Initialize interrupts */
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
-
+   HAL_Delay(10000);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -173,6 +173,15 @@ static void MX_NVIC_Init(void)
   /* USART1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(USART1_IRQn);
+  /* LPUART1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(LPUART1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(LPUART1_IRQn);
+  /* DMA1_Channel2_3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel2_3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
+  /* EXTI4_15_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 }
 
 /* USER CODE BEGIN 4 */

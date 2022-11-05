@@ -6,20 +6,28 @@
  */
 #include "crc.h"
 #include "main.h"
-uint32_t Crc(uint32_t PreviousCRC, uint32_t DataLength, uint8_t *data)
+int RandomNumber[] = { 131456, 215134, 31254, 4135, 516454, 642754, 71363, 85362475, 9144316, 10341957, 11345134, 11354342 };
+int k              = 0;
+uint32_t Crc(uint32_t PreviuseCRC, uint32_t DataLength, uint8_t *data)
 {
-   PreviousCRC ^= data[0];
+   PreviuseCRC ^= data[0];
    for(uint32_t i = 1; i < DataLength; i++)
    {
       uint32_t temp = data[i];
-      PreviousCRC ^= ((uint32_t)temp * (256 * i));
-      if(PreviousCRC & 0x80000000)
+      if(temp == 0x00000000 )
       {
-         PreviousCRC ^= 0xABC245C2;
+         temp = RandomNumber[k % (sizeof(RandomNumber)-1)];
+         k++;
       }
-      PreviousCRC <<= 1;
+      PreviuseCRC ^= ((uint32_t)(temp) * (256 * i));
+      if(PreviuseCRC & 0x80000000)
+      {
+         PreviuseCRC ^= 0xABC245C2;
+      }
+      PreviuseCRC <<= 1;
    }
-   return PreviousCRC;
+   k = 0;
+   return PreviuseCRC;
 }
 CRCStatus_TypeDef RepareMessage(uint32_t OryginalCRC, uint8_t *data, uint32_t DataLength)
 {
@@ -29,7 +37,7 @@ CRCStatus_TypeDef RepareMessage(uint32_t OryginalCRC, uint8_t *data, uint32_t Da
       for(int j = 0; j < 8; j++)
       {
          data[i] ^= (temp << j);
-         if(OryginalCRC == Crc(CRC_INITIAL_VALUE, DataLength, data))
+         if(OryginalCRC == Crc(CRC_INITIAL_VALUE, DataLength - 4, data))
          {
             return CRC_OK;
          }

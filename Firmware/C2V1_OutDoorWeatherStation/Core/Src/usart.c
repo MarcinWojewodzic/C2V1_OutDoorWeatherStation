@@ -26,6 +26,7 @@
 
 UART_HandleTypeDef hlpuart1;
 UART_HandleTypeDef huart1;
+DMA_HandleTypeDef hdma_lpuart1_rx;
 DMA_HandleTypeDef hdma_usart1_rx;
 
 /* LPUART1 init function */
@@ -41,15 +42,16 @@ void MX_LPUART1_UART_Init(void)
 
   /* USER CODE END LPUART1_Init 1 */
   hlpuart1.Instance = LPUART1;
-  hlpuart1.Init.BaudRate = 115200;
+  hlpuart1.Init.BaudRate = 2400;
   hlpuart1.Init.WordLength = UART_WORDLENGTH_8B;
   hlpuart1.Init.StopBits = UART_STOPBITS_1;
   hlpuart1.Init.Parity = UART_PARITY_NONE;
   hlpuart1.Init.Mode = UART_MODE_TX_RX;
   hlpuart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   hlpuart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  hlpuart1.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  hlpuart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  hlpuart1.Init.ClockPrescaler = UART_PRESCALER_DIV16;
+  hlpuart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_DMADISABLEONERROR_INIT;
+  hlpuart1.AdvancedInit.DMADisableonRxError = UART_ADVFEATURE_DMA_DISABLEONRXERROR;
   hlpuart1.FifoMode = UART_FIFOMODE_DISABLE;
   if (HAL_UART_Init(&hlpuart1) != HAL_OK)
   {
@@ -152,6 +154,24 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     GPIO_InitStruct.Alternate = GPIO_AF6_LPUART1;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+    /* LPUART1 DMA Init */
+    /* LPUART1_RX Init */
+    hdma_lpuart1_rx.Instance = DMA1_Channel2;
+    hdma_lpuart1_rx.Init.Request = DMA_REQUEST_LPUART1_RX;
+    hdma_lpuart1_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_lpuart1_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_lpuart1_rx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_lpuart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_lpuart1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    hdma_lpuart1_rx.Init.Mode = DMA_NORMAL;
+    hdma_lpuart1_rx.Init.Priority = DMA_PRIORITY_LOW;
+    if (HAL_DMA_Init(&hdma_lpuart1_rx) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    __HAL_LINKDMA(uartHandle,hdmarx,hdma_lpuart1_rx);
+
   /* USER CODE BEGIN LPUART1_MspInit 1 */
 
   /* USER CODE END LPUART1_MspInit 1 */
@@ -227,6 +247,11 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     */
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_2|GPIO_PIN_3);
 
+    /* LPUART1 DMA DeInit */
+    HAL_DMA_DeInit(uartHandle->hdmarx);
+
+    /* LPUART1 interrupt Deinit */
+    HAL_NVIC_DisableIRQ(LPUART1_IRQn);
   /* USER CODE BEGIN LPUART1_MspDeInit 1 */
 
   /* USER CODE END LPUART1_MspDeInit 1 */

@@ -75,6 +75,7 @@ void Error_Handler(void);
 #define LED0_GPIO_Port GPIOB
 #define SWITCH_Pin GPIO_PIN_8
 #define SWITCH_GPIO_Port GPIOA
+#define SWITCH_EXTI_IRQn EXTI4_15_IRQn
 #define HC12_SET_Pin GPIO_PIN_11
 #define HC12_SET_GPIO_Port GPIOA
 #define DS18B20_Pin GPIO_PIN_12

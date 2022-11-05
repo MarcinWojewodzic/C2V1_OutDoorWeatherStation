@@ -11,8 +11,8 @@
 #include "crc.h"
 #include "main.h"
 #include "stdio.h"
-uint8_t RfpDataRecive[20]   = { 0 };
-uint8_t RfpDataTransmit[20] = { 0 };
+uint8_t RfpDataRecive[100]   = { 0 };
+uint8_t RfpDataTransmit[100] = { 0 };
 static RFP_TypeDef *Rfp;
 static void RFP_ChangeState(void);
 static void RFP_InitializeFunction(void);
@@ -109,7 +109,7 @@ void RFP_SendData(RFPDeviceID_TypeDef Destination, RFPMessageType_TypeDef Type, 
    RfpDataTransmit[3 + Length + 2] = ((crc >> 8) & 0xff);
    RfpDataTransmit[3 + Length + 3] = (crc & 0xff);
    Rfp->SendFlag                   = RFP_SEND_FLAG_SET;
-   Rfp->DataSize                   = 3 + Length + 4;
+   Rfp->DataSizeTransmit           = 3 + Length + 4;
 }
 static void RFP_SendResponseFunction(RFPMessageType_TypeDef Response)
 {
@@ -224,7 +224,7 @@ static void RFP_SendFunction(void)
    if(Rfp->Cnt < 5)
    {
       HAL_Delay(200);
-      HC12_TransmitData(RfpDataTransmit, Rfp->DataSize);
+      HC12_TransmitData(RfpDataTransmit, Rfp->DataSizeTransmit);
       Rfp->Cnt++;
       Rfp->NewEvent = RFP_EVENT_WAIT_FOR_RESPONSE;
       Rfp->LastTick = HAL_GetTick();

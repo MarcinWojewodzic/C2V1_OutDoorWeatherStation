@@ -5,12 +5,12 @@
  *      Author: M
  */
 #include "MAXProtocol.h"
-#include "HC12.h"
+#include "MAX485.h"
 #include "crc.h"
 #include "main.h"
 #include "stdio.h"
-uint8_t MAXDataRecive[20]   = { 0 };
-uint8_t MAXDataTransmit[20] = { 0 };
+uint8_t MAXDataRecive[100]   = { 0 };
+uint8_t MAXDataTransmit[100] = { 0 };
 static MAX_TypeDef *MAX;
 static void MAX_ChangeState(void);
 static void MAX_InitializeFunction(void);
@@ -92,6 +92,10 @@ void MAX_InterruptTask(void)
 {
    MAX->NewDataFlag = MAX_NEW_DATA_FLAG_SET;
 }
+void MAX_InterruptErrorTask(void)
+{
+   MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+}
 void MAX_SendData(MAXDeviceID_TypeDef Destination, MAXMessageType_TypeDef Type, uint8_t *Data, uint32_t Length)
 {
    MAXDataTransmit[0] = Destination;
@@ -107,11 +111,10 @@ void MAX_SendData(MAXDeviceID_TypeDef Destination, MAXMessageType_TypeDef Type, 
    MAXDataTransmit[3 + Length + 2] = ((crc >> 8) & 0xff);
    MAXDataTransmit[3 + Length + 3] = (crc & 0xff);
    MAX->SendFlag                   = MAX_SEND_FLAG_SET;
-   MAX->DataSize                   = 3 + Length + 4;
+   MAX->DatTransmitSize            = 3 + Length + 4;
 }
 static void MAX_SendResponseFunction(MAXMessageType_TypeDef Response)
 {
-   HAL_Delay(200);
    MAXDataTransmit[0] = MAX->SourceMessage;
    MAXDataTransmit[1] = MAX->DeviceType;
    MAXDataTransmit[2] = MAX_MESSAGE;
@@ -121,13 +124,12 @@ static void MAX_SendResponseFunction(MAXMessageType_TypeDef Response)
    MAXDataTransmit[5] = ((crc >> 16) & 0xff);
    MAXDataTransmit[6] = ((crc >> 8) & 0xff);
    MAXDataTransmit[7] = (crc & 0xff);
-   HC12_TransmitData(MAXDataTransmit, 8);
+   MAX485_TransmitData(MAXDataTransmit, 8);
 }
 static void MAX_InitializeFunction(void)
 {
    MAX->NewEvent = MAX_EVENT_END_INITIALIZE;
-   HC12_ExitCommandMode();
-   HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+   MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
 }
 static void MAX_IdleFunction(void)
 {
@@ -140,7 +142,7 @@ static void MAX_IdleFunction(void)
    {
       MAX->SendFlag = MAX_SEND_FLAG_RESET;
       MAX->NewEvent = MAX_EVENT_SEND;
-      HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+      MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
    }
 }
 static void MAX_ParseFunction(void)
@@ -151,7 +153,7 @@ static void MAX_ParseFunction(void)
    {
       MAX->NewEvent = MAX_EVENT_ERROR;
       MAX_SendResponseFunction(MAX_ERROR);
-      HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+      MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
    }
    else
    {
@@ -175,7 +177,7 @@ static void MAX_ParseFunction(void)
             {
                MAX->NewEvent = MAX_EVENT_ERROR;
                MAX_SendResponseFunction(MAX_CRC_ERROR);
-               HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+               MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
             }
          }
       }
@@ -214,14 +216,13 @@ static void MAX_RunningFunction(void)
          break;
       }
    }
-   HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+   MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
 }
 static void MAX_SendFunction(void)
 {
    if(MAX->Cnt < 5)
    {
-      HAL_Delay(200);
-      HC12_TransmitData(MAXDataTransmit, MAX->DataSize);
+      MAX485_TransmitData(MAXDataTransmit, MAX->DatTransmitSize);
       MAX->Cnt++;
       MAX->NewEvent = MAX_EVENT_WAIT_FOR_RESPONSE;
       MAX->LastTick = HAL_GetTick();
@@ -230,7 +231,7 @@ static void MAX_SendFunction(void)
    {
       MAX->Cnt      = 0;
       MAX->NewEvent = MAX_EVENT_ERROR;
-      HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+      MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
    }
 }
 static void MAX_WaitForResponseFunction(void)
@@ -257,18 +258,18 @@ static void MAX_ParseResponseFunction(void)
          {
             MAX->NewEvent = MAX_EVENT_DATA_OK;
             MAX->Cnt      = 0;
-            HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+            MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
          }
          else
          {
             MAX->NewEvent = MAX_EVENT_ERROR;
-            HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+            MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
          }
       }
       else
       {
          MAX->NewEvent = MAX_EVENT_ERROR;
-         HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+         MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
       }
    }
    else if(RepareMessage(MessageCRC, MAXDataRecive, MAX->DataSize) == CRC_OK)
@@ -279,23 +280,23 @@ static void MAX_ParseResponseFunction(void)
          {
             MAX->NewEvent = MAX_EVENT_DATA_OK;
             MAX->Cnt      = 0;
-            HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+            MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
          }
          else
          {
             MAX->NewEvent = MAX_EVENT_ERROR;
-            HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+            MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
          }
       }
       else
       {
          MAX->NewEvent = MAX_EVENT_ERROR;
-         HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+         MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
       }
    }
    else
    {
-      HC12_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
+      MAX485_ReciveToIdleDMA(MAXDataRecive, sizeof(MAXDataRecive));
       MAX->NewEvent = MAX_EVENT_ERROR;
    }
 }

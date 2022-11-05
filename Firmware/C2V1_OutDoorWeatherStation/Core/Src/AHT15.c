@@ -6,7 +6,7 @@
  */
 #include "AHT15.h"
 #include "main.h"
-I2C_HandleTypeDef *AHT15_I2c;
+static I2C_HandleTypeDef *AHT15_I2c;
 static void AHT15_Transmit(uint8_t *Data, uint8_t Length)
 {
    HAL_I2C_Master_Transmit(AHT15_I2c, AHT15_ADDRESS, Data, Length, AHT15_MAX_TIMEOUT);
