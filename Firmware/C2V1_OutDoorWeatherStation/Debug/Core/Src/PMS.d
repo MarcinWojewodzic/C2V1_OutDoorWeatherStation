@@ -1,5 +1,4 @@
-Core/Src/SM.o: ../Core/Src/SM.c ../Core/Inc/SM.h \
- ../Core/Inc/MAXProtocol.h ../Core/Inc/main.h \
+Core/Src/PMS.o: ../Core/Src/PMS.c ../Core/Inc/PMS.h ../Core/Inc/main.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h \
  ../Core/Inc/stm32g0xx_hal_conf.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_rcc.h \
@@ -37,12 +36,8 @@ Core/Src/SM.o: ../Core/Src/SM.c ../Core/Inc/SM.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h \
- ../Core/Inc/Switch.h ../Core/Inc/rfp.h ../Core/Inc/AHT15.h \
- ../Core/Inc/MAXProtocol.h ../Core/Inc/OneWire.h ../Core/Inc/gpio.h \
- ../Core/Inc/PMS.h ../Core/Inc/i2c.h ../Core/Inc/main.h ../Core/Inc/rfp.h \
- ../Core/Inc/tim.h ../Core/Inc/usart.h
-../Core/Inc/SM.h:
-../Core/Inc/MAXProtocol.h:
+ ../Core/Inc/main.h ../Core/Inc/usart.h
+../Core/Inc/PMS.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h:
 ../Core/Inc/stm32g0xx_hal_conf.h:
@@ -81,15 +76,5 @@ Core/Src/SM.o: ../Core/Src/SM.c ../Core/Inc/SM.h \
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h:
-../Core/Inc/Switch.h:
-../Core/Inc/rfp.h:
-../Core/Inc/AHT15.h:
-../Core/Inc/MAXProtocol.h:
-../Core/Inc/OneWire.h:
-../Core/Inc/gpio.h:
-../Core/Inc/PMS.h:
-../Core/Inc/i2c.h:
 ../Core/Inc/main.h:
-../Core/Inc/rfp.h:
-../Core/Inc/tim.h:
 ../Core/Inc/usart.h:

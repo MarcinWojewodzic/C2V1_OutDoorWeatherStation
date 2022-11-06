@@ -1,14 +1,17 @@
 /*
- * DS18B20.h
+ * ds18b20.h
  *
- *  Created on: Oct 23, 2022
- *      Author: M
+ *	The MIT License.
+ *  Created on: 20.09.2018
+ *      Author: Mateusz Salamon
+ *      www.msalamon.pl
+ *      mateusz@msalamon.pl
+ *
  */
+#ifndef	_DS18B20_H
+#define	_DS18B20_H
 
-#ifndef INC_DS18B20_H_
-#define INC_DS18B20_H_
-#include "OneWire.h"
-#include "main.h"
+#include "onewire.h"
 
 //
 //	CONFIGURATION
@@ -20,6 +23,7 @@
 #define	_DS18B20_GPIO					DS18B20_GPIO_Port
 #define	_DS18B20_PIN					DS18B20_Pin
 
+#define	_DS18B20_TIMER					htim2
 
 //#define _DS18B20_USE_CRC
 
@@ -31,7 +35,7 @@ typedef struct
 	uint8_t 	Address[8];
 	float 		Temperature;
 	uint8_t		ValidDataFlag;
-} DS18B20Sensor_TypeDef;
+} Ds18b20Sensor_t;
 
 //
 //	DEFINES
@@ -67,7 +71,7 @@ typedef enum {
 //
 
 // 	Init
-void DS18B20_Init(DS18B20_Resolution_t resolution,TIM_HandleTypeDef *tim);
+void		DS18B20_Init(DS18B20_Resolution_t resolution);
 //	Settings
 uint8_t 	DS18B20_GetResolution(uint8_t number); // Get the sensor resolution
 uint8_t 	DS18B20_SetResolution(uint8_t number, DS18B20_Resolution_t resolution);	// Set the sensor resolution
@@ -84,6 +88,5 @@ void		DS18B20_WriteROM(uint8_t number, uint8_t* ROM); // Write a ROM to 'number'
 // Return functions
 uint8_t 	DS18B20_Quantity(void);	// Returns quantity of connected sensors
 uint8_t		DS18B20_GetTemperature(uint8_t number, float* destination); // Returns 0 if read data is invalid
+#endif
 
-
-#endif /* INC_DS18B20_H_ */

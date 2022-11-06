@@ -14,7 +14,7 @@ TIM_HandleTypeDef *TimUs;
 void TIM_DelayUs(uint32_t DelayUs)
 {
    TimUs->Instance->CNT = 0;
-   while(TimUs->Instance->CNT < DelayUs)
+   while(TimUs->Instance->CNT <= DelayUs)
    {
    }
 }

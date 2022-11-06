@@ -1,4 +1,4 @@
-Core/Src/OneWire.o: ../Core/Src/OneWire.c ../Core/Inc/OneWire.h \
+Core/Src/onewire.o: ../Core/Src/onewire.c ../Core/Inc/tim.h \
  ../Core/Inc/main.h ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h \
  ../Core/Inc/stm32g0xx_hal_conf.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_rcc.h \
@@ -36,8 +36,9 @@ Core/Src/OneWire.o: ../Core/Src/OneWire.c ../Core/Inc/OneWire.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h \
- ../Core/Inc/DelayUs.h ../Core/Inc/main.h
-../Core/Inc/OneWire.h:
+ ../Core/Inc/onewire.h ../Core/Inc/gpio.h ../Core/Inc/ds18b20.h \
+ ../Core/Inc/onewire.h
+../Core/Inc/tim.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h:
 ../Core/Inc/stm32g0xx_hal_conf.h:
@@ -76,5 +77,7 @@ Core/Src/OneWire.o: ../Core/Src/OneWire.c ../Core/Inc/OneWire.h \
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h:
-../Core/Inc/DelayUs.h:
-../Core/Inc/main.h:
+../Core/Inc/onewire.h:
+../Core/Inc/gpio.h:
+../Core/Inc/ds18b20.h:
+../Core/Inc/onewire.h:

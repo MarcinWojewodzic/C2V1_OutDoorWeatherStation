@@ -50,37 +50,29 @@ static void SW_ChangeState(void)
 static void SW_InitializeFunction(void)
 {
    Sw->NewEvent = SW_EVENT_END_INITIALIZE;
-   //HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, 1);
 }
 static void SW_IdleFunction(void)
 {
    Sw->NewEvent = SW_EVENT_DEBOUNCE;
-   //HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 1);
 }
 static void SW_DebounceFunction(void)
 {
    Sw->NewEvent = SW_EVENT_PRESS;
-   //HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 1);
 }
 static void SW_TickFunction(void)
 {
    Sw->NewEvent = SW_EVENT_RELEASE;
-   //HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, 1);
 }
 static void SW_PressFunction(void)
 {
    Sw->NewEvent = SW_EVENT_CONFIRM;
-   //HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, 0);
 }
 static void SW_ConfirmFunction(void)
 {
    Sw->NewEvent = SW_EVENT_RELEASE;
-   //HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 0);
 }
 static void SW_ReleaseFunction(void)
 {
-   //HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 0);
-   //HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, 0);
    Sw->NewEvent = SW_EVENT_NOTHING;
 }
 void SW_Init(SW_TypeDef *Switch)

@@ -7,10 +7,14 @@
 #include "SM.h"
 #include "AHT15.h"
 #include "MAXProtocol.h"
+#include "OneWire.h"
+#include "PMS.h"
 #include "i2c.h"
 #include "main.h"
 #include "rfp.h"
 #include "stdio.h"
+#include "tim.h"
+#include "usart.h"
 void RFP_CommadTestFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart);
 void RFP_CommandStartMeasurmentFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart);
 void MAX_DataFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart);
@@ -23,6 +27,7 @@ SM_TypeDef Sm                                 = { 0 };
 SW_TypeDef Sw                                 = { 0 };
 RFP_TypeDef Rfp                               = { 0 };
 MAX_TypeDef MAX                               = { 0 };
+uint8_t PMSData[100]                          = { 0 };
 SMTransitionTable_TypeDef SmTransitionTable[] = { { SM_STATE_INITIALIZE, SM_STATE_RUNNING, SM_EVENT_END_INITIALIZE },
                                                   { SM_STATE_RUNNING, SM_STATE_SLEEP, SM_EVENT_END_RUNNING },
                                                   { SM_STATE_SLEEP, SM_STATE_RUNNING, SM_EVENT_END_SLEEP },
@@ -74,20 +79,22 @@ static void SM_InitializeFunction(void)
    MAX_RegisterDataFunction(MAX_DataFunction);
    uint8_t Temp = MAX_START_MEASURMENT;
    MAX_SendData(MAX_BS, MAX_COMMAND, &Temp, 1);
-   HAL_Delay(15000);
-   MAX_SendData(MAX_BS, MAX_COMMAND, &Temp, 1);
    Sm.NewEvent = SM_EVENT_END_INITIALIZE;
+   PMS_Reset();
+   PMS_ExitSleepMode();
+   HAL_UARTEx_ReceiveToIdle_DMA(&huart2, PMSData, 100);
 }
 static void SM_RunningFunction(void)
 {
    Switch_Handle();
-   if(Sw.State == SW_STATE_IDLE)
+   if(Sw.State == SW_STATE_IDLE && MAX.State == MAX_STATE_IDLE && Rfp.State == RFP_STATE_IDLE)
    {
       if(Sm.SensorFlag == SENSOR_FLAG_SET)
       {
          Sm.SensorFlag = SENSOR_FLAG_RESET;
          Sm.NewEvent   = SM_EVENT_WAIT_FOR_MEASURMENT;
          AHT15_TriggerMeasurment();
+         PMS_ExitSleepMode();
       }
       else
       {
@@ -123,6 +130,7 @@ void MAX_DataFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart)
 }
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
+   HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
    if(huart->Instance == USART1)
    {
       Rfp.DataSize = Size;
@@ -142,5 +150,6 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
    }
    else if(huart->Instance == USART2)
    {
+      HAL_UARTEx_ReceiveToIdle_DMA(&huart2, PMSData, 100);
    }
 }
