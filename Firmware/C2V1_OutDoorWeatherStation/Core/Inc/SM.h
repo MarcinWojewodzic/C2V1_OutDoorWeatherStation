@@ -11,13 +11,15 @@
 #include "Switch.h"
 #include "main.h"
 #include "rfp.h"
+//#define DEBUG_SWCLK
 #define SM_TRANSITION_TABLE_SIZE sizeof(SmTransitionTable) / sizeof(SMTransitionTable_TypeDef)
 #define ALL_SENSOR_DELAY         9000 // 90 s
+#define PMS_MAX_TIMEOUT          5000
 typedef enum
 {
    SM_STATE_INITIALIZE,
    SM_STATE_RUNNING,
-   SM_STATE_WAIT_FOR_MEASURMENT,
+   SM_STATE_WAIT_FOR_SEND,
    SM_STATE_SLEEP
 } SMState_TypeDef;
 typedef enum
@@ -25,7 +27,7 @@ typedef enum
    SM_EVENT_NOTHING,
    SM_EVENT_END_INITIALIZE,
    SM_EVENT_END_RUNNING,
-   SM_EVENT_WAIT_FOR_MEASURMENT,
+   SM_EVENT_WAIT_FOR_SEND,
    SM_EVENT_SEND_DATA,
    SM_EVENT_END_SLEEP
 } SMEvent_TypeDef;
@@ -53,8 +55,14 @@ typedef struct
    MAX_TypeDef *Max;
    uint32_t LastTick;
    SensorFlag_TypeDef SensorFlag;
+   SensorFlag_TypeDef StartReadSensorMeasurmentFlag;
    SensorFlag_TypeDef PMSFlag;
    uint32_t CntMs;
+   float AHT15_Temperature;
+   float AHT15_Humidity;
+   uint16_t Brightness;
+   float EXT_Temperature;
+   float BatteryVoltage;
 } SM_TypeDef;
 void SM_Handle(void);
 #endif /* INC_SM_H_ */

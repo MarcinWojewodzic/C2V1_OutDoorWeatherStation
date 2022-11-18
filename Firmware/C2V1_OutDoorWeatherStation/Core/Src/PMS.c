@@ -7,16 +7,19 @@
 #include "PMS.h"
 #include "main.h"
 #include "usart.h"
+#include "SM.h"
 void PMS_Reset(void)
 {
    HAL_GPIO_WritePin(PMS_RST_GPIO_Port, PMS_RST_Pin, 0);
    HAL_Delay(1000);
    HAL_GPIO_WritePin(PMS_RST_GPIO_Port, PMS_RST_Pin, 1);
 }
+#ifndef DEBUG_SWCLK
 void PMS_ReceiveToIdle(uint8_t *Data, uint32_t Length)
 {
    HAL_UARTEx_ReceiveToIdle_DMA(&huart2, Data, Length);
 }
+#endif
 void PMS_EnterSleepMode(void)
 {
 	HAL_GPIO_WritePin(PMS_SET_GPIO_Port, PMS_SET_Pin, 0);

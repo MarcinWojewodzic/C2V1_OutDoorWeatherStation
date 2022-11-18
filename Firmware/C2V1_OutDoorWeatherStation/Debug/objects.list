@@ -1,4 +1,5 @@
 "./Core/Src/AHT15.o"
+"./Core/Src/Battery.o"
 "./Core/Src/DelayUs.o"
 "./Core/Src/HC12.o"
 "./Core/Src/MAX485.o"
