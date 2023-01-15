@@ -20,7 +20,8 @@ typedef enum
    SM_STATE_INITIALIZE,
    SM_STATE_RUNNING,
    SM_STATE_WAIT_FOR_SEND,
-   SM_STATE_SLEEP
+   SM_STATE_SLEEP,
+   SM_STATE_WAKEUP
 } SMState_TypeDef;
 typedef enum
 {
@@ -29,7 +30,8 @@ typedef enum
    SM_EVENT_END_RUNNING,
    SM_EVENT_WAIT_FOR_SEND,
    SM_EVENT_SEND_DATA,
-   SM_EVENT_END_SLEEP
+   SM_EVENT_END_SLEEP,
+   SM_EVENT_WAKEUP
 } SMEvent_TypeDef;
 typedef enum
 {
@@ -57,6 +59,8 @@ typedef struct
    SensorFlag_TypeDef SensorFlag;
    SensorFlag_TypeDef StartReadSensorMeasurmentFlag;
    SensorFlag_TypeDef PMSFlag;
+   SensorFlag_TypeDef DeepSleepFlag;
+   uint32_t DurationDeepSleep;
    uint32_t CntMs;
    float AHT15_Temperature;
    float AHT15_Humidity;

@@ -1503,4 +1503,39 @@ Text GLabel 14750 4350 2    50   Input ~ 0
 GND
 Text GLabel 14750 4650 2    50   Input ~ 0
 GND
+$Comp
+L Device:C C21
+U 1 1 630ED3AA
+P 1550 6350
+F 0 "C21" H 1665 6396 50  0000 L CNN
+F 1 "100n" H 1665 6305 50  0000 L CNN
+F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder" H 1588 6200 50  0001 C CNN
+F 3 "~" H 1550 6350 50  0001 C CNN
+	1    1550 6350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C22
+U 1 1 630ED3B0
+P 1900 6350
+F 0 "C22" H 2015 6396 50  0000 L CNN
+F 1 "100n" H 2015 6305 50  0000 L CNN
+F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder" H 1938 6200 50  0001 C CNN
+F 3 "~" H 1900 6350 50  0001 C CNN
+	1    1900 6350
+	1    0    0    -1  
+$EndComp
+Text GLabel 1750 6150 1    50   Input ~ 0
+VBAT+
+Wire Wire Line
+	1750 6150 1750 6200
+Wire Wire Line
+	1750 6200 1550 6200
+Wire Wire Line
+	1750 6200 1900 6200
+Connection ~ 1750 6200
+Wire Wire Line
+	1550 6500 1900 6500
+Text GLabel 1750 6500 3    50   Input ~ 0
+GND
 $EndSCHEMATC

@@ -23,6 +23,7 @@ C_SRCS += \
 ../Core/Src/main.c \
 ../Core/Src/onewire.c \
 ../Core/Src/rfp.c \
+../Core/Src/rtc.c \
 ../Core/Src/stm32g0xx_hal_msp.c \
 ../Core/Src/stm32g0xx_it.c \
 ../Core/Src/syscalls.c \
@@ -50,6 +51,7 @@ OBJS += \
 ./Core/Src/main.o \
 ./Core/Src/onewire.o \
 ./Core/Src/rfp.o \
+./Core/Src/rtc.o \
 ./Core/Src/stm32g0xx_hal_msp.o \
 ./Core/Src/stm32g0xx_it.o \
 ./Core/Src/syscalls.o \
@@ -77,6 +79,7 @@ C_DEPS += \
 ./Core/Src/main.d \
 ./Core/Src/onewire.d \
 ./Core/Src/rfp.d \
+./Core/Src/rtc.d \
 ./Core/Src/stm32g0xx_hal_msp.d \
 ./Core/Src/stm32g0xx_it.d \
 ./Core/Src/syscalls.d \
@@ -93,7 +96,7 @@ Core/Src/%.o Core/Src/%.su: ../Core/Src/%.c Core/Src/subdir.mk
 clean: clean-Core-2f-Src
 
 clean-Core-2f-Src:
-	-$(RM) ./Core/Src/AHT15.d ./Core/Src/AHT15.o ./Core/Src/AHT15.su ./Core/Src/Battery.d ./Core/Src/Battery.o ./Core/Src/Battery.su ./Core/Src/DelayUs.d ./Core/Src/DelayUs.o ./Core/Src/DelayUs.su ./Core/Src/HC12.d ./Core/Src/HC12.o ./Core/Src/HC12.su ./Core/Src/MAX485.d ./Core/Src/MAX485.o ./Core/Src/MAX485.su ./Core/Src/MAXProtocol.d ./Core/Src/MAXProtocol.o ./Core/Src/MAXProtocol.su ./Core/Src/PMS.d ./Core/Src/PMS.o ./Core/Src/PMS.su ./Core/Src/SM.d ./Core/Src/SM.o ./Core/Src/SM.su ./Core/Src/Switch.d ./Core/Src/Switch.o ./Core/Src/Switch.su ./Core/Src/adc.d ./Core/Src/adc.o ./Core/Src/adc.su ./Core/Src/crc.d ./Core/Src/crc.o ./Core/Src/crc.su ./Core/Src/dma.d ./Core/Src/dma.o ./Core/Src/dma.su ./Core/Src/ds18b20.d ./Core/Src/ds18b20.o ./Core/Src/ds18b20.su ./Core/Src/gpio.d ./Core/Src/gpio.o ./Core/Src/gpio.su ./Core/Src/i2c.d ./Core/Src/i2c.o ./Core/Src/i2c.su ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/onewire.d ./Core/Src/onewire.o ./Core/Src/onewire.su ./Core/Src/rfp.d ./Core/Src/rfp.o ./Core/Src/rfp.su ./Core/Src/stm32g0xx_hal_msp.d ./Core/Src/stm32g0xx_hal_msp.o ./Core/Src/stm32g0xx_hal_msp.su ./Core/Src/stm32g0xx_it.d ./Core/Src/stm32g0xx_it.o ./Core/Src/stm32g0xx_it.su ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32g0xx.d ./Core/Src/system_stm32g0xx.o ./Core/Src/system_stm32g0xx.su ./Core/Src/tim.d ./Core/Src/tim.o ./Core/Src/tim.su ./Core/Src/usart.d ./Core/Src/usart.o ./Core/Src/usart.su
+	-$(RM) ./Core/Src/AHT15.d ./Core/Src/AHT15.o ./Core/Src/AHT15.su ./Core/Src/Battery.d ./Core/Src/Battery.o ./Core/Src/Battery.su ./Core/Src/DelayUs.d ./Core/Src/DelayUs.o ./Core/Src/DelayUs.su ./Core/Src/HC12.d ./Core/Src/HC12.o ./Core/Src/HC12.su ./Core/Src/MAX485.d ./Core/Src/MAX485.o ./Core/Src/MAX485.su ./Core/Src/MAXProtocol.d ./Core/Src/MAXProtocol.o ./Core/Src/MAXProtocol.su ./Core/Src/PMS.d ./Core/Src/PMS.o ./Core/Src/PMS.su ./Core/Src/SM.d ./Core/Src/SM.o ./Core/Src/SM.su ./Core/Src/Switch.d ./Core/Src/Switch.o ./Core/Src/Switch.su ./Core/Src/adc.d ./Core/Src/adc.o ./Core/Src/adc.su ./Core/Src/crc.d ./Core/Src/crc.o ./Core/Src/crc.su ./Core/Src/dma.d ./Core/Src/dma.o ./Core/Src/dma.su ./Core/Src/ds18b20.d ./Core/Src/ds18b20.o ./Core/Src/ds18b20.su ./Core/Src/gpio.d ./Core/Src/gpio.o ./Core/Src/gpio.su ./Core/Src/i2c.d ./Core/Src/i2c.o ./Core/Src/i2c.su ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/onewire.d ./Core/Src/onewire.o ./Core/Src/onewire.su ./Core/Src/rfp.d ./Core/Src/rfp.o ./Core/Src/rfp.su ./Core/Src/rtc.d ./Core/Src/rtc.o ./Core/Src/rtc.su ./Core/Src/stm32g0xx_hal_msp.d ./Core/Src/stm32g0xx_hal_msp.o ./Core/Src/stm32g0xx_hal_msp.su ./Core/Src/stm32g0xx_it.d ./Core/Src/stm32g0xx_it.o ./Core/Src/stm32g0xx_it.su ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32g0xx.d ./Core/Src/system_stm32g0xx.o ./Core/Src/system_stm32g0xx.su ./Core/Src/tim.d ./Core/Src/tim.o ./Core/Src/tim.su ./Core/Src/usart.d ./Core/Src/usart.o ./Core/Src/usart.su
 
 .PHONY: clean-Core-2f-Src
 

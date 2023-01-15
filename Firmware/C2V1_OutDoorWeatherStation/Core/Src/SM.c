@@ -13,30 +13,37 @@
 #include "i2c.h"
 #include "main.h"
 #include "rfp.h"
+#include "rtc.h"
 #include "stdio.h"
 #include "tim.h"
 #include "usart.h"
 void RFP_CommadTestFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart);
 void RFP_CommandStartMeasurmentFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart);
+void RFP_CommandResetFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart);
+void RFP_CommandEnterDebugModeFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart);
+void RFP_CommandExitDebugModeFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart);
+void RFP_CommandEnterDeepSleepFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart);
 void MAX_DataFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart);
 static void SM_InitializeFunction(void);
 static void SM_RunningFunction(void);
 static void SM_WaitForSendFunction(void);
 static void SM_SleepFunction(void);
+static void SM_WakeUpFunctiomn(void);
 static void SM_ChangeState(void);
 static void SM_FillPayloadFunction(void);
-SM_TypeDef Sm                                 = { 0 };
-SW_TypeDef Sw                                 = { 0 };
-RFP_TypeDef Rfp                               = { 0 };
-MAX_TypeDef MAX                               = { 0 };
-uint8_t PMSData[100]                          = { 0 };
-uint8_t DataSensor[100]                       = { 0 };
-SMTransitionTable_TypeDef SmTransitionTable[] = { { SM_STATE_INITIALIZE, SM_STATE_RUNNING, SM_EVENT_END_INITIALIZE },
-                                                  { SM_STATE_RUNNING, SM_STATE_SLEEP, SM_EVENT_END_RUNNING },
-                                                  { SM_STATE_SLEEP, SM_STATE_RUNNING, SM_EVENT_END_SLEEP },
-                                                  { SM_STATE_RUNNING, SM_STATE_WAIT_FOR_SEND, SM_EVENT_WAIT_FOR_SEND },
-                                                  { SM_STATE_WAIT_FOR_SEND, SM_STATE_SLEEP, SM_EVENT_SEND_DATA } };
-SMFunctions_TypeDef SmFunctions[] = { { SM_InitializeFunction }, { SM_RunningFunction }, { SM_WaitForSendFunction }, { SM_SleepFunction } };
+SM_TypeDef Sm           = { 0 };
+SW_TypeDef Sw           = { 0 };
+RFP_TypeDef Rfp         = { 0 };
+MAX_TypeDef MAX         = { 0 };
+uint8_t PMSData[100]    = { 0 };
+uint8_t DataSensor[100] = { 0 };
+SMTransitionTable_TypeDef SmTransitionTable[]
+    = { { SM_STATE_INITIALIZE, SM_STATE_RUNNING, SM_EVENT_END_INITIALIZE }, { SM_STATE_RUNNING, SM_STATE_SLEEP, SM_EVENT_END_RUNNING },
+        { SM_STATE_SLEEP, SM_STATE_RUNNING, SM_EVENT_END_SLEEP },           { SM_STATE_RUNNING, SM_STATE_WAIT_FOR_SEND, SM_EVENT_WAIT_FOR_SEND },
+        { SM_STATE_WAIT_FOR_SEND, SM_STATE_SLEEP, SM_EVENT_SEND_DATA },     { SM_STATE_SLEEP, SM_STATE_WAKEUP, SM_EVENT_WAKEUP },
+        { SM_STATE_WAKEUP, SM_STATE_RUNNING, SM_EVENT_END_SLEEP } };
+SMFunctions_TypeDef SmFunctions[]
+    = { { SM_InitializeFunction }, { SM_RunningFunction }, { SM_WaitForSendFunction }, { SM_SleepFunction }, { SM_WakeUpFunctiomn } };
 void SM_Handle(void)
 {
    if(Rfp.Initialize == RFP_INITIALIZE)
@@ -79,11 +86,18 @@ static void SM_InitializeFunction(void)
    AHT15_InitFunction(&hi2c1);
    RFP_RegisterCommandFunction(RFP_TEST, RFP_CommadTestFunction);
    RFP_RegisterCommandFunction(RFP_START_MEASURMENT, RFP_CommandStartMeasurmentFunction);
+   RFP_RegisterCommandFunction(RFP_RESET, RFP_CommandResetFunction);
+   RFP_RegisterCommandFunction(RFP_ENTER_DEBUG_MODE, RFP_CommandEnterDebugModeFunction);
+   RFP_RegisterCommandFunction(RFP_GO_TO_DEEP_SLEEP, RFP_CommandEnterDeepSleepFunction);
+   RFP_RegisterCommandFunction(RFP_EXIT_DEBUG_MODE, RFP_CommandExitDebugModeFunction);
    MAX_RegisterDataFunction(MAX_DataFunction);
    Sm.NewEvent = SM_EVENT_END_INITIALIZE;
+    //Sm.SensorFlag = SENSOR_FLAG_SET;
    PMS_Reset();
    PMS_EnterSleepMode();
-   Sm.SensorFlag = SENSOR_FLAG_SET;
+   // Sm.DeepSleepFlag     = SENSOR_FLAG_SET;
+   // Sm.DurationDeepSleep = 10;
+   // Sm.SensorFlag        = SENSOR_FLAG_SET;
 }
 static void SM_RunningFunction(void)
 {
@@ -98,7 +112,6 @@ static void SM_RunningFunction(void)
          Sm.StartReadSensorMeasurmentFlag = SENSOR_FLAG_SET;
          uint8_t Temp                     = MAX_START_MEASURMENT;
          MAX_SendData(MAX_BS, MAX_COMMAND, &Temp, 1);
-         AHT15_TriggerMeasurment();
          PMS_ExitSleepMode();
          Sm.PMSFlag = SENSOR_FLAG_RESET;
          Sm.CntMs   = 0;
@@ -107,7 +120,7 @@ static void SM_RunningFunction(void)
       {
          if(Sm.CntMs >= ALL_SENSOR_DELAY)
          {
-            AHT15_ReadMesurmentFloat(&Sm.AHT15_Temperature, &Sm.AHT15_Humidity);
+            AHT15_TriggerMeasurment();
 #ifndef DEBUG_SWCLK
             HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, 1);
             HAL_UARTEx_ReceiveToIdle_DMA(&huart2, PMSData, 100);
@@ -120,7 +133,15 @@ static void SM_RunningFunction(void)
                }
             }
             HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, 0);
+            if(HAL_GetTick() - Time < 500)
+            {
+               HAL_Delay(500);
+            }
+#else
+            HAL_Delay(500);
 #endif
+
+            AHT15_ReadMesurmentFloat(&Sm.AHT15_Temperature, &Sm.AHT15_Humidity);
             __disable_irq();
             SM_FillPayloadFunction();
             __enable_irq();
@@ -143,7 +164,7 @@ static void SM_WaitForSendFunction(void)
    Sm.CntMs++;
    if(Rfp.State != RFP_STATE_IDLE)
    {
-      if(Sm.CntMs > ALL_SENSOR_DELAY)
+      if(Sm.CntMs > ALL_SENSOR_DELAY + 9000)
       {
          Sm.CntMs    = 0;
          Sm.NewEvent = SM_EVENT_SEND_DATA;
@@ -157,14 +178,33 @@ static void SM_WaitForSendFunction(void)
 }
 static void SM_SleepFunction(void)
 {
-   HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 0);
-   HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 0);
-   HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, 0);
-   HAL_SuspendTick();
-   //HAL_PWR_EnterSLEEPMode(PWR_LOWPOWERREGULATOR_ON, PWR_SLEEPENTRY_WFI);
-   HAL_ResumeTick();
-   Sm.NewEvent   = SM_EVENT_END_SLEEP;
-   Sm.SensorFlag = SENSOR_FLAG_SET;
+   if(Sm.DeepSleepFlag == SENSOR_FLAG_SET)
+   {
+      Sm.DeepSleepFlag = SENSOR_FLAG_RESET;
+      HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, Sm.DurationDeepSleep, RTC_WAKEUPCLOCK_CK_SPRE_16BITS);
+      HAL_SuspendTick();
+      HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
+      HAL_ResumeTick();
+      SystemClock_Config();
+      Sm.NewEvent = SM_EVENT_WAKEUP;
+   }
+   else
+   {
+      HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 0);
+      HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 0);
+      HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, 0);
+      HAL_SuspendTick();
+      HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_STOPENTRY_WFI);
+      HAL_ResumeTick();
+      Sm.NewEvent = SM_EVENT_END_SLEEP;
+   }
+}
+static void SM_WakeUpFunctiomn(void)
+{
+   uint8_t Temp = RFP_EXIT_DEEP_SLEEP;
+   RFP_SendData(RFP_IDWS, RFP_MESSAGE, &Temp, 1);
+   RFP_Handle();
+   Sm.NewEvent = SM_EVENT_END_SLEEP;
 }
 static void SM_FillPayloadFunction(void)
 {
@@ -189,10 +229,8 @@ static void SM_FillPayloadFunction(void)
    DataSensor[9]  = *TempPtr;
    TempPtr        = Sm.Brightness;
    DataSensor[10] = RFP_BRIGHTNESS;
-   DataSensor[11] = *TempPtr;
-   TempPtr++;
-   DataSensor[12] = *TempPtr;
-   TempPtr++;
+   DataSensor[11] = ((Sm.Brightness >> 8));
+   DataSensor[12] = (Sm.Brightness & 0xff);
    TempPtr        = &Sm.BatteryVoltage;
    DataSensor[13] = RFP_BATTERY_LEVEL;
    DataSensor[14] = *TempPtr;
@@ -203,7 +241,7 @@ static void SM_FillPayloadFunction(void)
    TempPtr++;
    DataSensor[17] = *TempPtr;
    DataSensor[18] = RFP_BATTERY_STATE;
-   DataSensor[19] = 0; // TODO;
+   DataSensor[19] = GPIOA->IDR & 0x03;
    DataSensor[20] = RFP_AIR_POLLUTION_PM1;
    DataSensor[21] = PMSData[10];
    DataSensor[22] = PMSData[11];
@@ -232,15 +270,33 @@ void RFP_CommandStartMeasurmentFunction(uint8_t *Data, uint32_t DataLength, uint
 {
    Sm.SensorFlag = SENSOR_FLAG_SET;
 }
+void RFP_CommandResetFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart)
+{
+   HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
+   HAL_Delay(1000);
+   HAL_NVIC_SystemReset();
+}
+void RFP_CommandEnterDebugModeFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart)
+{
+   HAL_TIM_Base_Start_IT(&htim17);
+}
+void RFP_CommandEnterDeepSleepFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart)
+{
+   Sm.DeepSleepFlag = SENSOR_FLAG_SET;
+}
+void RFP_CommandExitDebugModeFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart)
+{
+   HAL_TIM_Base_Stop_IT(&htim17);
+}
 void MAX_DataFunction(uint8_t *Data, uint32_t DataLength, uint32_t DataStart)
 {
    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, 1);
+   Sm.Brightness = ((Data[DataStart] << 8) | Data[DataStart + 1]);
 }
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
    if(huart->Instance == USART1)
    {
-      HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
       Rfp.DataSize = Size;
       RFP_InterruptTask();
    }
@@ -269,4 +325,8 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
          HAL_UARTEx_ReceiveToIdle_DMA(&huart2, PMSData, 100);
       }
    }
+}
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+   HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
 }

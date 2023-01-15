@@ -1,2 +1,0 @@
-../Core/Src/DelayUs.c:14:6:TIM_DelayUs	16	static
-../Core/Src/DelayUs.c:21:6:TIM_Init	16	static

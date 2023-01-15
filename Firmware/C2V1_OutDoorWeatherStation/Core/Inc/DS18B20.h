@@ -23,7 +23,7 @@
 #define	_DS18B20_GPIO					DS18B20_GPIO_Port
 #define	_DS18B20_PIN					DS18B20_Pin
 
-#define	_DS18B20_TIMER					htim2
+#define	_DS18B20_TIMER					htim17
 
 //#define _DS18B20_USE_CRC
 

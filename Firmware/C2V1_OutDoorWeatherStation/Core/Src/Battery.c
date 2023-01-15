@@ -19,5 +19,5 @@ float ODWS_CheckBatteryLevel(void)
       HAL_ADC_PollForConversion(&hadc1, 1000);
       Temp += HAL_ADC_GetValue(&hadc1);
    }
-   return (3.3 / 4095 * (Temp / 10));
+   return ((3.3 / 4095.0 * (Temp / 10))*2);
 }

@@ -9,8 +9,8 @@
 #define INC_RFP_H_
 #include "main.h"
 #define RFP_TRANSITION_TABLE_SIZE sizeof(RfpTransitionTable) / sizeof(RFPTransitionTable_TypeDef)
-#define RFP_COMMAND_CNT           3
-#define RFP_MESSAGE_CNT           4
+#define RFP_COMMAND_CNT           6
+#define RFP_MESSAGE_CNT           5
 typedef enum
 {
    RFP_BS   = 0x01,
@@ -49,14 +49,18 @@ typedef enum
 {
    RFP_TEST             = 0x01,
    RFP_START_MEASURMENT = 0x02,
-   RFP_GO_TO_DEEP_SLEEP = 0x03
+   RFP_GO_TO_DEEP_SLEEP = 0x03,
+   RFP_RESET            = 0x04,
+   RFP_ENTER_DEBUG_MODE = 0x05,
+   RFP_EXIT_DEBUG_MODE  = 0x06
 } RFPCommands_TypeDef;
 typedef enum
 {
-   RFP_ERROR       = 0x01,
-   RFP_CRC_ERROR   = 0x02,
-   RFP_LOW_BATTERY = 0x03,
-   RFP_OK          = 0x04
+   RFP_ERROR           = 0x01,
+   RFP_CRC_ERROR       = 0x02,
+   RFP_LOW_BATTERY     = 0x03,
+   RFP_OK              = 0x04,
+   RFP_EXIT_DEEP_SLEEP = 0x05
 } RFPMessage_TypeDef;
 typedef enum
 {
@@ -66,16 +70,21 @@ typedef enum
 } RFPMessageType_TypeDef;
 typedef enum
 {
-   RFP_ERROR_SIZE       = 0x00,
-   RFP_CRC_ERROR_SIZE   = 0x00,
-   RFP_LOW_BATTERY_SIZE = 0x04,
-   RFP_OK_SIZE          = 0x00
+   RFP_ERROR_SIZE           = 0x00,
+   RFP_CRC_ERROR_SIZE       = 0x00,
+   RFP_LOW_BATTERY_SIZE     = 0x04,
+   RFP_OK_SIZE              = 0x00,
+   RFP_EXIT_DEEP_SLEEP_SIZE = 0x00
+
 } RFPMessageDataSize_TypeDef;
 typedef enum
 {
    RFP_TEST_SIZE             = 0x00,
    RFP_START_MEASURMENT_SIZE = 0x00,
-   RFP_GO_TO_DEEP_SLEEP_SIZE = 0x02
+   RFP_GO_TO_DEEP_SLEEP_SIZE = 0x02,
+   RFP_RESET_SIZE            = 0x00,
+   RFP_ENTER_DEBUG_MODE_SIZE = 0x00,
+   RFP_EXIT_DEBUG_MODE_SIZE  = 0x00
 } RFPCommandDataSize_TypeDef;
 typedef enum
 {
